@@ -31,6 +31,15 @@ def save_histogram(data, title, filename):
 
 
 def main():
+    # ===== PDF requirement checklist =====
+    # 1) Uniformly distributed (int), between min and max ✅
+    # 2) Uniformly distributed (double), between min and max ✅
+    # 3) Normal with mean m and std s ✅
+    # 4) Exponential with mean e ✅
+    # 5) One other distribution by group number (Group 4 -> Gamma) ✅
+    # 6) Use seed = group number ✅
+    # 7) Use n = 10, 100, 1000, 10000 and plot histograms ✅
+
     # Step 1: Set up folder and random generator.
     out_dir = Path("histograms")
     out_dir.mkdir(exist_ok=True)
@@ -38,6 +47,12 @@ def main():
 
     # Step 2: Define sample sizes.
     sample_sizes = [10, 100, 1000, 10000]
+
+    # Group 4 "Other" distribution is Gamma.
+    # The PDF names Gamma but does not provide its parameters.
+    # Keep these two values easy to edit if your professor gave specific ones.
+    gamma_shape = 2.0
+    gamma_scale = 2.0
 
     # Step 3: For each n, generate each distribution and save histogram.
     for n in sample_sizes:
@@ -58,9 +73,12 @@ def main():
         save_histogram(expo, f"Exponential mean=8, n={n}", out_dir / f"exponential_{n}.png")
 
         # Other distribution for Group 4: Gamma
-        # (Using shape=2.0, scale=2.0 as a simple default)
-        gamma = rng.gamma(shape=2.0, scale=2.0, size=n)
-        save_histogram(gamma, f"Gamma (k=2, theta=2), n={n}", out_dir / f"gamma_{n}.png")
+        gamma = rng.gamma(shape=gamma_shape, scale=gamma_scale, size=n)
+        save_histogram(
+            gamma,
+            f"Gamma (k={gamma_shape}, theta={gamma_scale}), n={n}",
+            out_dir / f"gamma_{n}.png",
+        )
 
         print(f"Finished n={n}")
 
